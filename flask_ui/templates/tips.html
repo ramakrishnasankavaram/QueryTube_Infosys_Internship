@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Quick Tips{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Quick Tips</h2>
+  <ul>
+    <li>Use concise keywords or short phrases (e.g., "linear regression intuition").</li>
+    <li>Try channel names + topic (e.g., "Krish Naik machine learning") for more focused results.</li>
+    <li>For best summaries, open the video page and click "View Summary" to get the AI-generated synopsis.</li>
+    <li>If a video is missing metadata (views/channel), consider re-ingesting the CSV with the correct columns: <code>title,transcript,channel_title,view_count,duration_seconds,embedding</code>.</li>
+    <li>Use the Upload CSV flow to add or correct entries locally.</li>
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "layout.html" %}
+{% block title %}Upload CSV{% endblock %}
+{% block content %}
+<style>
+  .upload-section {
+    max-width: 700px;
+    margin: 40px auto;
+  }
+
+  .upload-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid;
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+  }
+
+  .upload-card h2 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .upload-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  .upload-info {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .file-input-wrapper {
+    position: relative;
+    margin: 30px 0;
+  }
+
+  .file-input-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 30px;
+    border: 3px dashed #667eea;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .file-input-label:hover {
+    border-color: #764ba2;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    transform: translateY(-2px);
+  }
+
+  .file-input-label.dragover {
+    border-color: #764ba2;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  }
+
+  .file-input-label .emoji {
+    font-size: 48px;
+    margin-bottom: 15px;
+  }
+
+  .file-input-label span {
+    color: #667eea;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .file-input-label small {
+    display: block;
+    color: #999;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+
+  #csv_file {
+    display: none;
+  }
+
+  .file-name {
+    margin-top: 12px;
+    color: #28a745;
+    font-weight: 600;
+    font-size: 13px;
+    display: none;
+  }
+
+  .file-name.show {
+    display: block;
+  }
+
+  .upload-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 20px;
+  }
+
+  .upload-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+
+  .upload-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .upload-progress {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f0f4ff;
+    border-radius: 6px;
+    text-align: center;
+    color: #667eea;
+    font-weight: 600;
+  }
+
+  .upload-progress.show {
+    display: block;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #667eea;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .requirements {
+    margin-top: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff8f0 0%, #fffaf5 100%);
+    border-left: 4px solid #ff9800;
+    border-radius: 6px;
+    color: #e65100;
+    font-size: 13px;
+  }
+
+  .requirements h4 {
+    margin: 0 0 15px 0;
+    color: #e65100;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .requirements ul {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.8;
+  }
+
+  .requirements li {
+    margin-bottom: 8px;
+  }
+
+  .example-csv {
+    margin-top: 25px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    font-size: 12px;
+    color: #666;
+    overflow-x: auto;
+  }
+
+  .example-csv code {
+    font-family: 'Courier New', monospace;
+    color: #333;
+  }
+</style>
+
+<div class="upload-section">
+  <div class="upload-card">
+    <h2>📊 Upload CSV Data</h2>
+    <p class="upload-subtitle">Add new videos to the database and ingest them into the vector search engine</p>
+    
+    <div class="upload-info">
+      <strong>✅ Note:</strong> CSV files are automatically processed and ingested. The system creates 384-dimensional embeddings from transcript text if not provided.
+    </div>
+
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}" id="upload-form">
+      <div class="file-input-wrapper">
+        <label class="file-input-label" for="csv_file" id="drop-zone">
+          <span class="emoji">📁</span>
+          <span id="file-label">Choose CSV File or Drag & Drop</span>
+          <small>Maximum file size: 50MB | Format: .csv (UTF-8)</small>
+        </label>
+        <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+        <div id="file-name" class="file-name"></div>
+      </div>
+
+      <div class="upload-progress" id="upload-progress">
+        <div class="spinner"></div>
+        <span id="progress-text">Processing your file...</span>
+      </div>
+
+      <button class="upload-btn" type="submit" id="upload-btn">⬆️ Upload & Ingest Data</button>
+    </form>
+
+    <div class="requirements">
+      <h4>📋 CSV Column Requirements:</h4>
+      <ul>
+        <li><strong>Required:</strong> <code>title</code>, <code>transcript</code></li>
+        <li><strong>Optional:</strong> <code>channel_title</code>, <code>view_count</code>, <code>duration_seconds</code>, <code>embedding</code> (JSON array)</li>
+        <li><strong>Format:</strong> UTF-8 encoded, with headers in first row</li>
+        <li><strong>Auto-embedding:</strong> If <code>embedding</code> column is missing, 384-dimensional vectors are generated from transcripts</li>
+      </ul>
+    </div>
+
+    <div class="example-csv">
+      <strong>📝 Example CSV format:</strong><br>
+      <code>title,transcript,channel_title,view_count,duration_seconds<br>
+      "Video Title","Full transcript text...","Channel Name",1000,300<br>
+      "Another Video","More transcript...","Another Channel",5000,600</code>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fileInput = document.getElementById('csv_file');
+  const fileName = document.getElementById('file-name');
+  const uploadBtn = document.getElementById('upload-btn');
+  const uploadForm = document.getElementById('upload-form');
+  const dropZone = document.getElementById('drop-zone');
+  const uploadProgress = document.getElementById('upload-progress');
+  const progressText = document.getElementById('progress-text');
+
+  // File selection
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+      fileName.textContent = `✅ Selected: ${file.name} (${sizeMB}MB)`;
+      fileName.classList.add('show');
+      uploadBtn.disabled = false;
+    } else {
+      fileName.classList.remove('show');
+      uploadBtn.disabled = true;
+    }
+  });
+
+  // Drag and drop
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].name.endsWith('.csv')) {
+      fileInput.files = files;
+      const event = new Event('change', { bubbles: true });
+      fileInput.dispatchEvent(event);
+    } else {
+      alert('Please drop a CSV file');
+    }
+  });
+
+  // Upload form submission
+  uploadForm.addEventListener('submit', function() {
+    uploadBtn.disabled = true;
+    uploadProgress.classList.add('show');
+    progressText.textContent = 'Processing your file... this may take a moment';
+  });
+</script>
+{% endblock %}

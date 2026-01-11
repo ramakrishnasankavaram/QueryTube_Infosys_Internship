@@ -1,0 +1,168 @@
+{% extends "layout.html" %}
+{% block title %}Summary{% endblock %}
+{% block content %}
+<style>
+  .summary-container {
+    max-width: 900px;
+    margin: 40px auto;
+  }
+
+  .summary-header {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    border-left: 4px solid;
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+  }
+
+  .summary-header h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 24px;
+  }
+
+  .summary-meta {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .summary-thumb {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .thumb {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    object-fit: cover;
+  }
+
+  .summary-info {
+    flex: 1;
+  }
+
+  .summary-info h3 {
+    color: #667eea;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    word-break: break-all;
+  }
+
+  .transcript-label {
+    color: #666;
+    font-weight: 600;
+    margin: 20px 0 10px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .transcript {
+    background: #f5f7fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 260px;
+    overflow-y: auto;
+    white-space: pre-wrap; /* allow wrapping */
+    word-break: break-word;
+    margin: 0; /* remove default pre margin */
+    font-family: inherit; /* use UI font for cleaner look */
+  }
+
+  .summary-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .summary-content h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .summary-content p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .back-btn:hover {
+    background: #e0e0e0;
+    transform: translateX(-3px);
+  }
+
+  @media (max-width: 768px) {
+    .summary-meta {
+      flex-direction: column;
+    }
+
+    .thumb {
+      width: 100%;
+    }
+
+    .summary-header,
+    .summary-content {
+      padding: 20px;
+    }
+  }
+</style>
+
+<div class="summary-container">
+  <a class="back-btn" href="{{ url_for('home') }}">← Back to Search</a>
+
+  <div class="summary-header">
+    <h2>📹 Video Summary</h2>
+    
+    <div class="summary-meta">
+      <div class="summary-thumb">
+        <img src="{{ thumbnail }}" alt="Video Thumbnail" class="thumb">
+      </div>
+      
+      <div class="summary-info">
+        <h3>{{ video_id }}</h3>
+        
+        <div class="transcript-label">📄 Transcript Preview</div>
+        <pre class="transcript">{{ transcript_preview }}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-content">
+    <h3>✨ Automated Summary</h3>
+    <p>{{ summary }}</p>
+  </div>
+</div>
+{% endblock %}

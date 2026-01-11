@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}How It Works{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>How It Works</h2>
+  <p class="muted">QueryTube uses semantic search powered by vector embeddings to find relevant video segments across our dataset.</p>
+
+  <h3>Overview</h3>
+  <ul>
+    <li><strong>Embedding:</strong> Each video transcript is converted into a fixed-size vector using a sentence-transformer model.</li>
+    <li><strong>Vector DB:</strong> Vectors are stored in ChromaDB for fast nearest-neighbor search.</li>
+    <li><strong>Search:</strong> Your query is embedded and compared to stored vectors to return the most semantically similar videos.</li>
+    <li><strong>Similarity Score:</strong> We compute a similarity percentage to represent relevance.</li>
+    <li><strong>Summaries:</strong> You can view an AI-generated summary for each video.</li>
+  </ul>
+
+  <h3>Privacy & Data</h3>
+  <p class="muted">Uploaded CSVs are used to augment your local dataset. No data is sent externally unless you configure an external API.</p>
+</div>
+{% endblock %}
