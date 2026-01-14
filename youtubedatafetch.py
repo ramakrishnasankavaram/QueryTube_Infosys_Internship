@@ -127,7 +127,7 @@ def get_channel_videos(api_key, channel_id, max_results=50):
     return all_videos
 
 # Configuration
-API_KEY = "AIzaSyAi26lpIsNQroAiwZEZT6M_9SAGFRAgc6o"
+API_KEY = ""
 CHANNEL_ID = "UCtmn-DsF4BhPug-ff9LiDAA"  # FeelFreeToLearn
 MAX_RESULTS = 50
 
